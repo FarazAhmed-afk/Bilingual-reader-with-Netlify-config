@@ -2,7 +2,7 @@
 body { margin: 0; background: var(--ui-bg); color: var(--ui-ink); font-family: var(--ui-font); }
 :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 2px; }
 
-.shell { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+.shell { max-width: 72rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
 .bar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
 .bar h1 { font-size: 1.1rem; margin: 0; font-weight: 700; }
 
@@ -13,9 +13,13 @@ body { margin: 0; background: var(--ui-bg); color: var(--ui-ink); font-family: v
 
 .flag { background: #fff4d6; border: 1px solid #e3c36a; color: #5c4400; border-radius: 8px; padding: .5rem .75rem; font-size: .9rem; margin-bottom: 1rem; }
 
-/* The reading surface. Everything inside is driven by --r-* tokens. */
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: 1rem; align-items: start; }
+@media (max-width: 54rem) { .workspace { grid-template-columns: minmax(0, 1fr); } }
+
+/* Reading surface: everything inside is driven by --r-* tokens. */
 .reader { background: var(--r-bg); color: var(--r-ink); border: 1px solid var(--ui-line); border-radius: 10px; padding: clamp(1rem, 4vw, 2.5rem); }
 .reader__title { font-family: var(--r-font); font-size: calc(var(--r-size) * 1.2); margin: 0 0 1rem; font-weight: 700; }
+.reader__text { position: relative; isolation: isolate; }
 .reader__body {
   font-family: var(--r-font);
   font-size: var(--r-size);
@@ -30,5 +34,26 @@ body { margin: 0; background: var(--ui-bg); color: var(--ui-ink); font-family: v
 }
 /* Urdu: letter-spacing would break Nastaliq joins, so it is forced off. */
 .reader[lang='ur'] .reader__body, .reader[lang='ur'] .reader__title { letter-spacing: 0 !important; }
-/* Nastaliq has tall ascenders/descenders; guarantee a minimum line box so lines never collide. */
-.reader[lang='ur'] .reader__body { line-height: max(var(--r-line), 1.9); }
+
+.w { transition: opacity .12s; }
+.w.is-dim { opacity: .35; }
+.focus-band { position: absolute; inset-inline: -.5rem; z-index: -1; background: rgba(250, 204, 21, .4); border-radius: 6px; transition: top .1s; pointer-events: none; }
+.reader__text:focus-visible { outline-offset: 6px; }
+
+/* Settings panel */
+.panel { background: var(--ui-surface); border: 1px solid var(--ui-line); border-radius: 10px; padding: 1rem; position: sticky; top: 1rem; }
+.panel__title { font-size: 1.05rem; margin: 0 0 .75rem; }
+.field { margin: 0 0 1rem; padding: 0; border: 0; }
+.field label, .field legend { display: flex; justify-content: space-between; gap: .5rem; font-weight: 700; font-size: .95rem; margin-bottom: .35rem; padding: 0; }
+.field output { font-weight: 400; color: var(--ui-muted); font-variant-numeric: tabular-nums; }
+.field select { width: 100%; font: inherit; min-height: 44px; padding: .4rem .5rem; border: 1px solid var(--ui-line); border-radius: 8px; background: #fff; color: var(--ui-ink); }
+.field input[type='range'] { width: 100%; min-height: 32px; accent-color: var(--ui-accent); }
+.field.check label { font-weight: 400; align-items: center; justify-content: flex-start; min-height: 32px; }
+.field.check input { width: 1.2rem; height: 1.2rem; accent-color: var(--ui-accent); }
+.hint { margin: .1rem 0 0 1.7rem; font-size: .85rem; color: var(--ui-muted); }
+.swatches { display: grid; gap: .25rem; }
+.swatch { display: flex !important; justify-content: flex-start !important; align-items: center; gap: .5rem; font-weight: 400 !important; min-height: 36px; margin: 0 !important; }
+.swatch input { accent-color: var(--ui-accent); width: 1.1rem; height: 1.1rem; }
+.swatch__chip { width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid #8a97a3; flex: none; }
+.btn { font: inherit; min-height: 44px; padding: .5rem 1rem; border: 1px solid var(--ui-accent); background: transparent; color: var(--ui-accent); border-radius: 8px; cursor: pointer; width: 100%; font-weight: 700; }
+.btn:hover { background: var(--ui-accent); color: var(--ui-accent-ink); }
