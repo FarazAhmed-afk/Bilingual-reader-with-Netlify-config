@@ -1,20 +1,49 @@
 import { LANGS, type Lang } from '../config/languages';
-import { BACKGROUNDS, CHUNK_LINES, RANGES, type ReaderSettings } from '../config/settings';
+import { BACKGROUNDS, CHUNK_LINES, RANGES, type ReaderSettings, type SettingKey } from '../config/settings';
+import type { Source, SuggestionStatus } from '../app/adjustableReducer';
 
 interface Props {
   lang: Lang;
   settings: ReaderSettings;
+  sources: Record<SettingKey, Source>;
+  suggestion: SuggestionStatus;
+  suggested: Partial<ReaderSettings>;
+  canSimplify: boolean;
   onChange: (patch: Partial<ReaderSettings>) => void;
+  onAccept: () => void;
+  onDecline: () => void;
   onReset: () => void;
 }
 
-export function SettingsPanel({ lang, settings: s, onChange, onReset }: Props) {
+export function SettingsPanel({ lang, settings: s, sources, suggestion, suggested, canSimplify, onChange, onAccept, onDecline, onReset }: Props) {
   const r = RANGES[lang];
   const fonts = LANGS[lang].fonts;
+  const bgLabel = BACKGROUNDS.find((b) => b.id === suggested.bgId)?.label ?? '';
+  const modified = Object.values(sources).includes('reader');
+  const status =
+    suggestion === 'accepted' ? (modified ? 'Suggested settings, adjusted by you' : 'Suggested settings')
+    : suggestion === 'declined' ? 'Chosen by you'
+    : modified ? 'Changed by you' : 'Starting layout';
 
   return (
     <section className="panel" aria-labelledby="panel-title">
       <h2 id="panel-title" className="panel__title">Reading settings</h2>
+      <p className="status" role="status">{status}</p>
+
+      {suggestion !== 'accepted' && (
+        <div className="suggest" role="group" aria-labelledby="sug-title">
+          <h3 id="sug-title">Suggested settings</h3>
+          <ul>
+            <li>Font size {suggested.sizePx} px</li>
+            <li>Line spacing {suggested.lineHeight?.toFixed(1)}</li>
+            <li>{bgLabel} background</li>
+          </ul>
+          <div className="suggest__actions">
+            <button type="button" className="btn btn--solid" onClick={onAccept}>Use suggested settings</button>
+            {suggestion === 'pending' && <button type="button" className="btn" onClick={onDecline}>Choose my own</button>}
+          </div>
+        </div>
+      )}
 
       <div className="field">
         <label htmlFor="s-font">Font</label>
@@ -67,8 +96,14 @@ export function SettingsPanel({ lang, settings: s, onChange, onReset }: Props) {
         <label><input type="checkbox" checked={s.chunking} onChange={(e) => onChange({ chunking: e.target.checked })} /> Text chunking</label>
         <p className="hint">Shows {CHUNK_LINES} lines at a time and dims the rest.</p>
       </div>
+      {canSimplify && (
+        <div className="field check">
+          <label><input type="checkbox" checked={s.simplified} onChange={(e) => onChange({ simplified: e.target.checked })} /> Simplified text</label>
+          <p className="hint">Shows a shorter, simpler version of this passage.</p>
+        </div>
+      )}
 
-      <button type="button" className="btn" onClick={onReset}>Reset to defaults</button>
+      <button type="button" className="btn" onClick={onReset}>Reset to starting layout</button>
     </section>
   );
 }

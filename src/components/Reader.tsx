@@ -4,14 +4,14 @@ import { BACKGROUNDS, type ReaderSettings } from '../config/settings';
 import type { Passage } from '../content/passages';
 import { ReaderBody } from './ReaderBody';
 
-interface Props { passage: Passage; lang: Lang; settings: ReaderSettings; simplified?: boolean }
+interface Props { passage: Passage; lang: Lang; settings: ReaderSettings }
 
 /** Renders one passage. All settings are applied through CSS variables so changes are immediate. */
-export function Reader({ passage, lang, settings: s, simplified = false }: Props) {
+export function Reader({ passage, lang, settings: s }: Props) {
   const cfg = LANGS[lang];
   const font = cfg.fonts.find((f) => f.id === s.fontId) ?? cfg.fonts[0];
   const bg = BACKGROUNDS.find((b) => b.id === s.bgId) ?? BACKGROUNDS[0];
-  const showSimple = simplified && !!passage.simplified;
+  const showSimple = s.simplified && !!passage.simplified;
   const text = showSimple ? passage.simplified! : passage.original;
 
   const style = {

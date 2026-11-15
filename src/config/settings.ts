@@ -9,7 +9,9 @@ export interface ReaderSettings {
   bgId: string;
   lineFocus: boolean;
   chunking: boolean;
+  simplified: boolean;       // RQ3 (optional): prepared simplified passage instead of the original
 }
+export type SettingKey = keyof ReaderSettings;
 
 export interface Range { min: number; max: number; step: number }
 
@@ -32,10 +34,11 @@ export const BACKGROUNDS: Background[] = [
 export const CHUNK_LINES = 3;
 
 /**
- * Starting values for the panel. NOTE: the formal "default" baseline condition and the
- * "system-suggested" values are defined in Milestone 3; these are neutral starting points.
+ * BASELINE = the fixed "default layout" comparison condition, and also the starting point of the
+ * adjustable condition. Values are design assumptions to confirm in a pilot (single-ish spacing,
+ * white background, no focus aids), loosely modelled on the control layout in Madjidi & Crick.
  */
-export const DEFAULTS: Record<Lang, ReaderSettings> = {
-  en: { fontId: 'atkinson', sizePx: 20, lineHeight: 1.5, letterSpacingEm: 0, wordSpacingEm: 0, bgId: 'white', lineFocus: false, chunking: false },
-  ur: { fontId: 'nastaliq', sizePx: 22, lineHeight: 2.0, letterSpacingEm: 0, wordSpacingEm: 0, bgId: 'white', lineFocus: false, chunking: false },
+export const BASELINE: Record<Lang, ReaderSettings> = {
+  en: { fontId: 'atkinson', sizePx: 18, lineHeight: 1.25, letterSpacingEm: 0, wordSpacingEm: 0, bgId: 'white', lineFocus: false, chunking: false, simplified: false },
+  ur: { fontId: 'nastaliq', sizePx: 22, lineHeight: 2.0, letterSpacingEm: 0, wordSpacingEm: 0, bgId: 'white', lineFocus: false, chunking: false, simplified: false },
 };
