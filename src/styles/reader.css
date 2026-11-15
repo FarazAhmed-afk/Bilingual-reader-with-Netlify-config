@@ -1,0 +1,34 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ui-bg); color: var(--ui-ink); font-family: var(--ui-font); }
+:focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 2px; }
+
+.shell { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+.bar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.bar h1 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+
+.seg { display: inline-flex; border: 1px solid var(--ui-line); border-radius: 8px; overflow: hidden; background: var(--ui-surface); }
+.seg button { font: inherit; padding: .55rem 1rem; border: 0; background: transparent; color: var(--ui-ink); cursor: pointer; min-height: 44px; }
+.seg button[aria-pressed='true'] { background: var(--ui-accent); color: var(--ui-accent-ink); }
+.seg button.ur-label { font-family: 'Noto Nastaliq Urdu', 'Lateef', serif; line-height: 1.8; }
+
+.flag { background: #fff4d6; border: 1px solid #e3c36a; color: #5c4400; border-radius: 8px; padding: .5rem .75rem; font-size: .9rem; margin-bottom: 1rem; }
+
+/* The reading surface. Everything inside is driven by --r-* tokens. */
+.reader { background: var(--r-bg); color: var(--r-ink); border: 1px solid var(--ui-line); border-radius: 10px; padding: clamp(1rem, 4vw, 2.5rem); }
+.reader__title { font-family: var(--r-font); font-size: calc(var(--r-size) * 1.2); margin: 0 0 1rem; font-weight: 700; }
+.reader__body {
+  font-family: var(--r-font);
+  font-size: var(--r-size);
+  line-height: var(--r-line);
+  letter-spacing: var(--r-letter);
+  word-spacing: var(--r-word);
+  max-width: var(--r-measure);
+  margin: 0;
+  text-align: start;            /* left in LTR, right in RTL; never justified */
+  hyphens: none;
+  overflow-wrap: break-word;
+}
+/* Urdu: letter-spacing would break Nastaliq joins, so it is forced off. */
+.reader[lang='ur'] .reader__body, .reader[lang='ur'] .reader__title { letter-spacing: 0 !important; }
+/* Nastaliq has tall ascenders/descenders; guarantee a minimum line box so lines never collide. */
+.reader[lang='ur'] .reader__body { line-height: max(var(--r-line), 1.9); }

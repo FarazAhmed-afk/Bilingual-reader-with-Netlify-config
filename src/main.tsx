@@ -1,0 +1,11 @@
+import { createRoot } from 'react-dom/client';
+import '@fontsource/noto-nastaliq-urdu/400.css';
+import '@fontsource/noto-nastaliq-urdu/500.css';
+import '@fontsource/lateef/400.css';
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import '@fontsource/opendyslexic/400.css';
+import './styles/tokens.css';
+import './styles/reader.css';
+import { App } from './app/App';
+createRoot(document.getElementById('root')!).render(<App />);

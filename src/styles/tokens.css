@@ -1,0 +1,22 @@
+:root {
+  --ui-bg: #eef1f4;
+  --ui-surface: #ffffff;
+  --ui-ink: #16212b;
+  --ui-muted: #55636f;
+  --ui-line: #cfd7de;
+  --ui-accent: #0f5c6e;
+  --ui-accent-ink: #ffffff;
+  --ui-focus: #b45309;
+  --ui-font: 'Atkinson Hyperlegible', system-ui, sans-serif;
+
+  /* Reader tokens: Milestone 2 will drive these from the settings panel. */
+  --r-font: 'Atkinson Hyperlegible', sans-serif;
+  --r-size: 1.25rem;
+  --r-line: 1.5;
+  --r-letter: 0em;
+  --r-word: 0em;
+  --r-bg: #ffffff;
+  --r-ink: #16212b;
+  --r-measure: 62ch;
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
